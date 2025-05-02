@@ -1,0 +1,27 @@
+startCommand:
+  type: stdio
+  configSchema:
+    type: object
+    required:
+      - solanaPrivateKey
+      - rpcUrl
+    properties:
+      solanaPrivateKey:
+        type: string
+        description: The base58-encoded private key for your Solana wallet.
+      rpcUrl:
+        type: string
+        description: The RPC endpoint for connecting to the Solana network.
+      openaiApiKey:
+        type: string
+        description: Optional OpenAI API key (optional).
+  commandFunction: |-
+    config => ({
+      command: 'node',
+      args: ['build/index.js'],
+      env: {
+        SOLANA_PRIVATE_KEY: config.solanaPrivateKey,
+        RPC_URL: config.rpcUrl,
+        ...(config.openaiApiKey && { OPENAI_API_KEY: config.openaiApiKey })
+      }
+    })
